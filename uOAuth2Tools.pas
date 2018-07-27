@@ -49,6 +49,10 @@ uses
   uOAuth2Consts
 {$IFDEF FPC}
   , StrUtils
+{$ELSE}
+{$IFDEF VER185}
+  , StrUtils
+{$ENDIF}
 {$ENDIF}
   ;
 
@@ -194,7 +198,16 @@ begin
     end;
     p := p2 + 1;
   end;
-  p2 := {$IFDEF FPC}PosEx{$ELSE}Pos{$ENDIF}('/', AUrl, p);
+  p2 :=
+    {$IFDEF FPC}
+      PosEx('/', AUrl, p)
+    {$ELSE}
+    {$IFDEF VER185}
+      PosEx('/', AUrl, p)
+    {$ELSE}
+      Pos('/', AUrl)
+    {$ENDIF}
+    {$ENDIF};
   if p2 = 0 then
     Exit;
   h := Copy(AUrl, p, p2 - p);

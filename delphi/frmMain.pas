@@ -12,7 +12,16 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, IdBaseComponent,
   IdComponent, IdTCPConnection, IdTCPClient, IdHTTP, uIndyClient, uOAuth2HttpClient,
-  uOAuth2Client, Vcl.Menus;
+  uOAuth2Client, Vcl.Menus
+  {$IFDEF VER185}
+  ,
+  Menus,
+  StdCtrls,
+  Controls,
+  Classes,
+  Dialogs
+  {$ENDIF}  
+  ;
 
 type
   TMainForm = class(TForm)
@@ -42,6 +51,9 @@ type
     est1: TMenuItem;
     JSON1: TMenuItem;
     Button1: TButton;
+    mniN1: TMenuItem;
+    mniLoad: TMenuItem;
+    dlgOpen: TOpenDialog;
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure Button2Click(Sender: TObject);
@@ -50,6 +62,7 @@ type
     procedure txtSiteExit(Sender: TObject);
     procedure txtResourceExit(Sender: TObject);
     procedure Button1Click(Sender: TObject);
+    procedure mniLoadClick(Sender: TObject);
   private
     { Private-Deklarationen }
     FClient: TIndyHttpClient;
@@ -171,6 +184,36 @@ end;
 procedure TMainForm.JSON1Click(Sender: TObject);
 begin
   JsonForm.Show;
+end;
+
+procedure TMainForm.mniLoadClick(Sender: TObject);
+var
+  list: TStrings;
+  value: TJsonValue;
+begin
+  list := TStringList.Create;
+  try
+    dlgOpen.InitialDir := ExtractFileDir(Application.ExeName);
+    if dlgOpen.Execute then
+    begin
+      list.LoadFromFile(dlgOpen.Filename);
+
+      with TJson.Create do
+      try
+        Parse(list.Text);
+        value := GetValue('client_id');
+        txtClientId.Text := Output.Strings[value.Index];
+        value := GetValue('client_secret');
+        txtClientSecret.Text := Output.Strings[value.Index];
+        value := GetValue('auth_uri');
+        txtSite.Text := Output.Strings[value.Index];
+      finally
+        Free;
+      end;
+    end;
+  finally
+    list.Free;
+  end;
 end;
 
 procedure TMainForm.txtResourceExit(Sender: TObject);

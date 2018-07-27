@@ -215,9 +215,16 @@ object MainForm: TMainForm
   end
   object MainMenu1: TMainMenu
     Left = 536
-    Top = 64
+    Top = 128
     object File1: TMenuItem
       Caption = '&File'
+      object mniLoad: TMenuItem
+        Caption = 'Load'
+        OnClick = mniLoadClick
+      end
+      object mniN1: TMenuItem
+        Caption = '-'
+      end
       object Exit1: TMenuItem
         Caption = '&Exit'
         OnClick = Exit1Click
@@ -230,5 +237,9 @@ object MainForm: TMainForm
         OnClick = JSON1Click
       end
     end
+  end
+  object dlgOpen: TOpenDialog
+    Left = 544
+    Top = 64
   end
 end

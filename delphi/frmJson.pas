@@ -10,7 +10,15 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls
+  {$IFDEF VER185}
+  ,
+  StdCtrls,
+  Controls,
+  ExtCtrls,
+  Classes
+  {$ENDIF}
+  ;
 
 type
   TJsonForm = class(TForm)

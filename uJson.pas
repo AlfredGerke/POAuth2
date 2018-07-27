@@ -85,6 +85,12 @@ type
 
 implementation
 
+uses
+  Windows;
+
+var
+  FormatSettings: TFormatSettings;
+
 function IndentString(Indent: Integer): TJsonString;
 begin
   Result := StringOfChar(' ', Indent * 2);
@@ -561,5 +567,11 @@ begin
   Result.Kind := JVKUnknown;
   Result.Index := -1;
 end;
+
+{$IFDEF VER185}
+initialization
+  GetLocaleFormatSettings(LOCALE_SYSTEM_DEFAULT, FormatSettings);
+finalization
+{$ENDIF}
 
 end.

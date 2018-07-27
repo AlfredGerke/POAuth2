@@ -27,3 +27,5 @@ Win64
 *.zip
 bpl
 dist
+*.~dsk
+*.dsk
